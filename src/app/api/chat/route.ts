@@ -1,3 +1,5 @@
+export const runtime = "nodejs";
+
 import { NextRequest, NextResponse } from "next/server";
 import Groq from "groq-sdk";
 
@@ -24,15 +26,15 @@ You help with:
 - Canteen info
 - Issue reporting
 - Study materials
-Reply friendly and useful.`;
+Reply friendly and useful.`; 
 
     const completion = await client.chat.completions.create({
-      model: "llama-3.1-8b-instant",   // WORKING FREE MODEL
+      model: "llama-3.1-8b-instant",
       messages: [
         { role: "system", content: campusContext },
         { role: "user", content: message },
       ],
-      max_tokens: 300
+      max_tokens: 300,
     });
 
     const reply =
@@ -40,13 +42,15 @@ Reply friendly and useful.`;
       "I could not process your request.";
 
     return NextResponse.json({ response: reply });
-
   } catch (error) {
     console.error("Chat API Error:", error);
 
-    return NextResponse.json({
-      response:
-        "Something went wrong. Try again, I'm here to help!",
-    });
+    return NextResponse.json(
+      {
+        response:
+          "Something went wrong. Try again, I'm here to help!",
+      },
+      { status: 500 }
+    );
   }
 }
